@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import 'package:rafia_task_01/config/color_config.dart';
 import 'package:rafia_task_01/config/text_config.dart';
 import 'package:rafia_task_01/models/day.dart';
+import 'package:rafia_task_01/models/time.dart';
 import 'package:rafia_task_01/widgets/date_and_day.dart';
 import 'package:rafia_task_01/widgets/time.dart';
 
@@ -13,29 +16,82 @@ class DurationScreen extends StatefulWidget {
 }
 
 class _DurationScreenState extends State<DurationScreen> {
-  
+  late List<Day> days;
+  late List<TimeModel> times;
+
   // create a function which return the no of days in current month
   List<Day> getNoOfDays() {
     DateTime now = DateTime.now();
     List<DateTime> currentMonth = [];
-    // create a list of dates of current month and add it to currentMonth list
-    for (int i = 1; i <= now.day; i++) {
+    // create a list of dates of current month from start of month to end of month (inclusive)
+    for (int i = 1; i <= DateTime(now.year, now.month, 0).day; i++) {
       currentMonth.add(DateTime(now.year, now.month, i));
     }
-    
-    List<Day> days = [];
-// loop over currentMonth and e
 
+    List<Day> days = [];
+    // loop over currentMonth and extract the day of the week and add it to days list
+    for (DateTime date in currentMonth) {
+      days.add(Day(
+        date.day,
+        DateFormat('EEE').format(date),
+      ));
+    }
+    return days;
+  }
+
+  List<TimeModel> getCurrentTime({DateTime? selectedDate}) {
+    DateTime _selectedDate = selectedDate ?? DateTime.now();
+    List<DateTime> currentTime = [];
+    // if _selectedDate is today, then add DateTime increased by 1 hour till the end of the today which is 11 PM
+    // to currentTime list from current time to current time + 1 hour
+
+    if (_selectedDate.day == DateTime.now().day) {
+      for (int i = DateTime.now().hour; i <= 23; i++) {
+        currentTime.add(DateTime(
+          _selectedDate.year,
+          _selectedDate.month,
+          _selectedDate.day,
+          i,
+        ));
+      }
+    } else {
+      // if _selectedDate is not today, then add DateTime increased by 1 hour till the end of the day which is 11 PM
+      // to currentTime list from current time to current time + 1 hour
+      for (int i = 0; i <= 23; i++) {
+        currentTime.add(DateTime(
+          _selectedDate.year,
+          _selectedDate.month,
+          _selectedDate.day,
+          i,
+        ));
+      }
+    }
+
+    List<TimeModel> times = [];
+
+    // loop over currentTime and extract the time in AM/PM format and add it to times list
+    for (DateTime time in currentTime) {
+      times.add(TimeModel(
+        DateFormat('hh:mm').format(time),
+        DateFormat('a').format(time),
+      ));
+    }
+
+    return times;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    days = getNoOfDays();
+    times = getCurrentTime();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
-          
-        ],
+        headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[],
         body: SingleChildScrollView(
           child: Flex(
             direction: Axis.vertical,
@@ -43,7 +99,6 @@ class _DurationScreenState extends State<DurationScreen> {
               Container(
                 height: 130,
               ),
-              
               Flex(
                 direction: Axis.vertical,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,9 +117,12 @@ class _DurationScreenState extends State<DurationScreen> {
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return DateAndDay(date: index, day: ,);
+                        return DateAndDay(
+                          date: days[index].date,
+                          day: days[index].weekDay,
+                        );
                       },
-                      itemCount: getNoOfDays(),
+                      itemCount: days.length,
                       separatorBuilder: (BuildContext context, int index) =>
                           const SizedBox(
                         width: 10,
@@ -87,9 +145,12 @@ class _DurationScreenState extends State<DurationScreen> {
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return Time(time: index);
+                        return Time(
+                          time: times[index].time,
+                          timeString: times[index].timeString,
+                        );
                       },
-                      itemCount: 30,
+                      itemCount: times.length,
                       separatorBuilder: (BuildContext context, int index) =>
                           const SizedBox(
                         width: 10,
@@ -104,9 +165,8 @@ class _DurationScreenState extends State<DurationScreen> {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 decoration: BoxDecoration(
-                  color: greenColor.withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8))),
-                
+                    color: greenColor.withOpacity(0.1),
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
                 child: Row(children: [
                   Checkbox(
                       activeColor: greenColor,
@@ -175,9 +235,22 @@ class _DurationScreenState extends State<DurationScreen> {
       ),
       appBar: AppBar(
         centerTitle: true,
-         backgroundColor: containerColor,
-        title: const Text('Guide Booking', style: TextStyle(color: blackColor, fontFamily: 'Metropolis', fontSize: 20, fontWeight: FontWeight.w500),),
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: blackColor,), onPressed: (){},),
+        backgroundColor: containerColor,
+        title: const Text(
+          'Guide Booking',
+          style: TextStyle(
+              color: blackColor,
+              fontFamily: 'Metropolis',
+              fontSize: 20,
+              fontWeight: FontWeight.w500),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: blackColor,
+          ),
+          onPressed: () {},
+        ),
       ),
     );
   }

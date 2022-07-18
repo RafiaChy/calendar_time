@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafia_task_01/config/shadow_config.dart';
 
 import 'package:rafia_task_01/config/text_config.dart';
 
@@ -6,37 +7,26 @@ class Time extends StatelessWidget {
   const Time({
     Key? key,
     required this.time,
+    required this.timeString,
   }) : super(key: key);
-  final int time;
+  final String time;
+  final String timeString;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
         width: 96,
-        padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(8),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 5,
-              blurRadius: 7,
-              // offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: containerDecorationConfig(context: context),
         child: Row(
           children: [
             Text(
-              '12:30',
+              time,
               style: Theme.of(context).textTheme.timeText,
             ),
             Text(
-              'PM',
+              timeString,
               style: Theme.of(context).textTheme.timeText,
             ),
           ],

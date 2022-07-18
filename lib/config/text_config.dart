@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafia_task_01/config/color_config.dart';
 
 extension TextConfig on TextTheme {
   TextStyle get timeText {
@@ -32,6 +33,7 @@ extension TextConfig on TextTheme {
       fontSize: 14,
       fontWeight: FontWeight.w400,
       fontFamily: 'Metropolis',
+      color: greyColor,
     );
   }
 
@@ -40,7 +42,7 @@ extension TextConfig on TextTheme {
       fontSize: 12,
       fontWeight: FontWeight.w500,
       fontFamily: 'Metropolis',
-     
+     color: greyColor,
     );
   }
 }

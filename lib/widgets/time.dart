@@ -14,23 +14,21 @@ class Time extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        width: 96,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: containerDecorationConfig(context: context),
-        child: Row(
-          children: [
-            Text(
-              time,
-              style: Theme.of(context).textTheme.timeText,
-            ),
-            Text(
-              timeString,
-              style: Theme.of(context).textTheme.timeText,
-            ),
-          ],
-        ),
+    return Container(
+      width: 96,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: containerDecorationConfig(context: context),
+      child: Row(
+        children: [
+          Text(
+            time,
+            style: Theme.of(context).textTheme.timeText,
+          ),
+          Text(
+            timeString,
+            style: Theme.of(context).textTheme.timeText,
+          ),
+        ],
       ),
     );
   }

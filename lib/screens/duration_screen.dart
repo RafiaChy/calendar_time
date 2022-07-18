@@ -119,7 +119,34 @@ class _DurationScreenState extends State<DurationScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            days.where((element) => element == days[index]);
+                            // create a new Day object with isSelected set to true
+                            // and replace the old Day object with the new one
+                            // at the same index in days list
+                            // and set all other days isSelected to false
+
+                            setState(() {
+                              days[index] = Day(
+                                days[index].date,
+                                days[index].weekDay,
+                                isSelected: !days[index].isSelected,
+                              );
+                              for (int i = 0; i < days.length; i++) {
+                                if (i != index) {
+                                  days[i] = Day(
+                                    days[i].date,
+                                    days[i].weekDay,
+                                    isSelected: false,
+                                  );
+                                }
+                              }
+                              times = getCurrentTime(
+                                selectedDate: DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  days[index].date,
+                                ),
+                              );
+                            });
                           },
                           child: DateAndDay(
                             day: days[index],

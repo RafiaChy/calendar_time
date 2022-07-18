@@ -117,9 +117,13 @@ class _DurationScreenState extends State<DurationScreen> {
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return DateAndDay(
-                          date: days[index].date,
-                          day: days[index].weekDay,
+                        return GestureDetector(
+                          onTap: () {
+                            days.where((element) => element == days[index]);
+                          },
+                          child: DateAndDay(
+                            day: days[index],
+                          ),
                         );
                       },
                       itemCount: days.length,
@@ -145,9 +149,12 @@ class _DurationScreenState extends State<DurationScreen> {
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return Time(
-                          time: times[index].time,
-                          timeString: times[index].timeString,
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Time(
+                            time: times[index].time,
+                            timeString: times[index].timeString,
+                          ),
                         );
                       },
                       itemCount: times.length,

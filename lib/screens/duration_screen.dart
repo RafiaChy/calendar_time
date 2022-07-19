@@ -5,6 +5,7 @@ import 'package:rafia_task_01/config/color_config.dart';
 import 'package:rafia_task_01/config/text_config.dart';
 import 'package:rafia_task_01/models/day.dart';
 import 'package:rafia_task_01/models/time.dart';
+
 import 'package:rafia_task_01/widgets/date_and_day.dart';
 import 'package:rafia_task_01/widgets/time.dart';
 
@@ -18,6 +19,8 @@ class DurationScreen extends StatefulWidget {
 class _DurationScreenState extends State<DurationScreen> {
   late List<Day> days;
   late List<TimeModel> times;
+  double _value = 0;
+  bool checkedTheBox = true;
 
   // create a function which return the no of days in current month
   List<Day> getNoOfDays() {
@@ -97,7 +100,62 @@ class _DurationScreenState extends State<DurationScreen> {
             direction: Axis.vertical,
             children: [
               Container(
+                margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
                 height: 130,
+                child: Column(
+                  children: [
+                    Text(
+                      'Duration',
+                      style: Theme.of(context)
+                          .textTheme
+                          .pickADate
+                          .copyWith(fontSize: 20),
+                    ),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                          thumbShape: const RoundSliderThumbShape(
+                              elevation: 3, disabledThumbRadius: 6),
+                          valueIndicatorColor: containerColor,
+                          activeTrackColor: greenColor,
+                          inactiveTrackColor: shadowColor,
+                          thumbColor: greenColor),
+                      child: Slider(
+                        min: 0,
+                        max: 2400,
+                        value: _value,
+                        onChanged: (value) {
+                          setState(() {
+                            _value = value;
+                          });
+                        },
+                      ),
+                    ),
+                    Flex(
+                      direction: Axis.horizontal,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            '6hrs',
+                            style: Theme.of(context).textTheme.pickADate,
+                          ),
+                        ),
+                        Text(
+                          'BDT',
+                          style: Theme.of(context)
+                              .textTheme
+                              .pickADate
+                              .copyWith(color: greyColor),
+                        ),
+                        Text(
+                          '2400',
+                          style: Theme.of(context).textTheme.pickADate,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
               Flex(
                 direction: Axis.vertical,
@@ -197,75 +255,88 @@ class _DurationScreenState extends State<DurationScreen> {
                 height: 120,
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 24),
-                decoration: BoxDecoration(
-                    color: greenColor.withOpacity(0.1),
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
-                child: Row(children: [
+                margin: const EdgeInsets.symmetric(horizontal: 37),
+                color: greenColor.withOpacity(0.2),
+                child: Flex(direction: Axis.horizontal, children: [
                   Checkbox(
                       activeColor: greenColor,
-                      value: true,
+                      value: checkedTheBox,
                       onChanged: (value) {
                         setState(() {
-                          value = false;
+                          checkedTheBox = value!;
                         });
                       }),
-                  Text('I want to take an insurance for this servie.',
-                      style: Theme.of(context).textTheme.checkBoxText),
+                  Flexible(
+                    child: Text('I want to take an insurance for this servie.',
+                        overflow: TextOverflow.visible,
+                        style: Theme.of(context).textTheme.checkBoxText),
+                  ),
                 ]),
               ),
               const SizedBox(
                 height: 80,
               ),
-              Material(
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+            ],
+          ),
+        ),
+      ),
+      bottomSheet: BottomSheet(
+        builder: (context) {
+          return Material(
+            elevation: 6,
+            child: SizedBox(
+              height: 130,
+              child: Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Flex(
+                    direction: Axis.vertical,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flex(
-                        direction: Axis.vertical,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'BDT 2400',
-                            style: Theme.of(context).textTheme.mainText,
-                          ),
-                          const Text('Sub Total',
-                              style: TextStyle(
-                                  fontFamily: 'Metropolis',
-                                  color: greyColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16)),
-                        ],
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: greenColor,
+                      Flexible(
+                        child: Text(
+                          'BDT 2400',
+                          style: Theme.of(context).textTheme.mainText,
                         ),
-                        onPressed: () {},
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                            Radius.circular(12),
-                          )),
-                          child: Text(
-                            'Pay Now',
-                            style: Theme.of(context).textTheme.mainText,
-                          ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          'Sub Total',
+                          style: Theme.of(context)
+                              .textTheme
+                              .pickADate
+                              .copyWith(fontSize: 16),
                         ),
                       ),
                     ],
                   ),
-                ),
-              )
-            ],
-          ),
-        ),
+                  Flexible(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: greenColor,
+                      ),
+                      onPressed: () {},
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(26, 15, 26, 15),
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                          Radius.circular(12),
+                        )),
+                        child: Text(
+                          'Pay Now',
+                          style: Theme.of(context).textTheme.mainText,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        onClosing: () {},
       ),
       appBar: AppBar(
         centerTitle: true,
@@ -289,3 +360,4 @@ class _DurationScreenState extends State<DurationScreen> {
     );
   }
 }
+

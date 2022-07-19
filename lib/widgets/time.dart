@@ -15,10 +15,12 @@ class Time extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 96,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      width: 98,
+      // padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 9),
       decoration: containerDecorationConfig(context: context),
-      child: Row(
+      child: Flex(
+        direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             time,
